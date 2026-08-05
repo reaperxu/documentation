@@ -1,0 +1,38 @@
+site_name: Документация продукта
+site_url: https://reaperxu.github.io/documentation/
+repo_url: https://github.com/reaperxu/documentation
+
+theme:
+  name: material
+  language: ru
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - content.code.copy
+
+nav:
+  - Главная: index.md
+  - БД:
+      - Заказы: db/database.md
+  - Бэк:
+      - Создание заказа: backend/create-order.md
+      - API Reference: backend/api-reference.md
+  - Фронт:
+      - Оформление заказа: frontend/оформление-заказа.md
+
+markdown_extensions:
+  - tables
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+plugins:
+  - search
+  - puml-file
+  - plantuml:
+      puml_url: https://www.plantuml.com/plantuml/
+  - render_swagger
