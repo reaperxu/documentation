@@ -1,3 +1,3 @@
-# API Reference
+# Swagger OpenAPI
 
 !!swagger swagger.yaml!!
