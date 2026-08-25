@@ -1,0 +1,26 @@
+name: Lint docs
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: 'docs/**/*.md'
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress 'docs/**/*.md'
+
+      - name: Lint YAML
+        run: |
+          pip install yamllint
+          yamllint mkdocs.yml docs/backend/swagger.yaml
