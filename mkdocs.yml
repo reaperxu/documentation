@@ -18,7 +18,8 @@ nav:
       - Заказы: db/database.md
   - Бэк:
       - Создание заказа: backend/create-order.md
-      - API Reference: backend/api-reference.md
+      - Получение информации о заказе: backend/get-order.md
+      - Swagger: backend/api-reference.md
   - Фронт:
       - Оформление заказа: frontend/оформление-заказа.md
 
