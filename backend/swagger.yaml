@@ -1,0 +1,60 @@
+openapi: 3.0.0
+info:
+  title: API Cinema Aggregator
+  description: Документация для приложения-агрегатора кинотеатров
+  version: 1.0.0
+servers:
+  - url: https://api.notsystemanalysis.com/v1
+paths:
+  /orders:
+    post:
+      summary: Создание заказа
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_id, items]
+              properties:
+                user_id:
+                  type: integer
+                  example: 42
+                items:
+                  type: array
+                  items:
+                    type: object
+                    required: [product_id, quantity]
+                    properties:
+                      product_id:
+                        type: integer
+                        example: 101
+                      quantity:
+                        type: integer
+                        example: 2
+      responses:
+        '201':
+          description: Заказ успешно создан
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 987
+                  status:
+                    type: string
+                    example: created
+                  total_amount:
+                    type: number
+                    example: 3450.00
+                  created_at:
+                    type: string
+                    format: date-time
+        '400':
+          description: Невалидное тело запроса
+        '404':
+          description: Товар не найден
+        '409':
+          description: Недостаточно товара на складе

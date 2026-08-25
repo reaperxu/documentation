@@ -1,0 +1,43 @@
+
+@startuml
+entity "users" as users {
+  * id : bigint <<PK>>
+  --
+  ...
+}
+
+entity "products" as products {
+  * id : bigint <<PK>>
+  --
+  ...
+}
+
+entity "order_statuses" as order_statuses {
+  * id : smallint <<PK>>
+  --
+  * code : varchar
+}
+
+entity "orders" as orders {
+  * id : bigint <<PK>>
+  --
+  * user_id : bigint <<FK>>
+  * status_id : smallint <<FK>>
+  * total_amount : numeric(10,2)
+  * created_at : timestamp
+}
+
+entity "order_items" as order_items {
+  * id : bigint <<PK>>
+  --
+  * order_id : bigint <<FK>>
+  * product_id : bigint <<FK>>
+  * quantity : integer
+  * price : numeric(10,2)
+}
+
+users ||--o{ orders
+order_statuses ||--o{ orders
+orders ||--o{ order_items
+products ||--o{ order_items
+@enduml
