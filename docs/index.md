@@ -1,17 +1,24 @@
-# Welcome to MkDocs
+# Документация продукта
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Здесь собрана техническая документация по проекту: описание бэкенда, фронтенда,
+структуры базы данных и API.
 
-## Commands
+## Разделы
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+- **[БД](db/database.md)** — структура таблиц, связи, ERD-диаграмма
+- **[Бэк](backend/create-order.md)** — методы, атрибуты запросов и ответов, коды ошибок
+- **[Фронт](frontend/оформление-заказа.md)** — описание экранов, поведение элементов, валидации
+- **[API Reference](backend/api-reference.md)** — интерактивная Swagger-документация
 
-## Project layout
+## Как пользоваться
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+Каждый раздел описывает один и тот же функционал (например, создание и получение
+заказа) с разных сторон — так удобнее понять, как связаны БД, бэк и фронт между собой.
+
+Если чего-то не хватает или документация расходится с реальным поведением системы —
+заводи Pull Request с правкой, все изменения проходят ревью перед мержем в `main`.
+
+## Полезные ссылки
+
+- [Репозиторий проекта](https://github.com/reaperxu/documentation)
+- [Правила оформления документации](CONTRIBUTING.md)
