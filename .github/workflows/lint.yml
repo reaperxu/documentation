@@ -1,5 +1,8 @@
+# Название workflow — отображается во вкладке Actions на GitHub
 name: Lint docs
 
+# Когда запускать: на каждый Pull Request, нацеленный в main.
+# Именно pull_request (а не push), потому что цель — проверить PR ДО мержа, а не сайт после деплоя.
 on:
   pull_request:
     branches: [main]
@@ -8,18 +11,23 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      # Скачивает код репозитория в раннер — без этого шага остальные шаги работают с пустой папкой
       - uses: actions/checkout@v4
 
-      - name: Lint Markdown
-        uses: DavidAnson/markdownlint-cli2-action@v16
-        with:
-          globs: 'docs/**/*.md'
-
+      # Проверяет, что все ссылки в .md файлах (в т.ч. внешние) рабочие, а не ведут в 404
       - name: Check links
         uses: lycheeverse/lychee-action@v2
         with:
           args: --no-progress 'docs/**/*.md'
 
+      # Проверяет орфографию русского текста (markdownlint орфографию не проверяет вообще).
+      # Настройки и словарь исключений — в .yaspellerrc в корне репозитория
+      - name: Check spelling
+        run: |
+          npm install -g yaspeller
+          yaspeller docs/**/*.md Инструкция_для_подсъемок_MD_PlantUML.md
+
+      # Проверяет синтаксис самих yaml-файлов проекта (конфиг MkDocs и Swagger-спека)
       - name: Lint YAML
         run: |
           pip install yamllint

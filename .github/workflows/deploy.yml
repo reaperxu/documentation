@@ -1,14 +1,32 @@
-   name: Deploy docs
-   on:
-     push:
-       branches: [main]
-   jobs:
-     deploy:
-       runs-on: ubuntu-latest
-       steps:
-         - uses: actions/checkout@v4
-         - uses: actions/setup-python@v5
-           with:
-             python-version: 3.x
-         - run: pip install mkdocs mkdocs-material mkdocs_puml mkdocs_puml_file mkdocs-render-swagger-plugin
-         - run: mkdocs gh-deploy --force
+# Название workflow — отображается во вкладке Actions на GitHub
+name: Deploy docs
+
+# Когда запускать: на каждый push в main — то есть после того, как PR уже смержен
+# (в отличие от lint.yml, который проверяет ещё не смерженный PR)
+on:
+  push:
+    branches: [main]
+
+# По умолчанию у токена github-actions[bot] нет прав на запись в репозиторий.
+# Без этого блока последний шаг (gh-deploy) падает с ошибкой "403: Permission denied"
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Скачивает код репозитория в раннер
+      - uses: actions/checkout@v4
+
+      # Ставит Python в раннер — без него негде запускать mkdocs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      # Все пакеты, которые нужны сайту для сборки: сам MkDocs, тема Material
+      # и три плагина — рендер PlantUML (инлайн и из файла) и рендер Swagger
+      - run: pip install mkdocs mkdocs-material mkdocs_puml mkdocs_puml_file mkdocs-render-swagger-plugin
+
+      # Собирает сайт и публикует его в ветку gh-pages — именно оттуда GitHub Pages отдаёт сайт наружу
+      - run: mkdocs gh-deploy --force
