@@ -1,17 +1,25 @@
+# Название сайта — отображается в шапке и в заголовке вкладки браузера
 site_name: Документация продукта
+# Итоговый URL сайта на GitHub Pages — нужен плагинам/темe для генерации абсолютных ссылок (sitemap и т.п.)
 site_url: https://reaperxu.github.io/documentation/
+# Ссылка на репозиторий — тема Material рисует по ней иконку/ссылку "Edit on GitHub" в шапке
 repo_url: https://github.com/reaperxu/documentation
 
 theme:
+  # Тема оформления сайта — Material for MkDocs (не встроенная стандартная тема mkdocs)
   name: material
+  # Язык интерфейса темы (кнопки поиска, футер и т.д.), не влияет на язык самого контента
   language: ru
+  # Отдельные фичи темы, включаются построчно
   features:
-    - navigation.tabs
-    - navigation.sections
-    - navigation.top
-    - search.suggest
-    - content.code.copy
+    - navigation.tabs      # разделы верхнего уровня nav показываются вкладками вверху страницы
+    - navigation.sections  # вложенные пункты nav группируются как подписанные секции в сайдбаре
+    - navigation.top       # кнопка "наверх страницы" при прокрутке
+    - search.suggest       # подсказки автодополнения в поиске по мере ввода
+    - content.code.copy    # кнопка "скопировать" у каждого блока кода
 
+# Структура левого меню сайта: порядок и вложенность здесь совпадают с тем, что увидит читатель.
+# Слева — подпись пункта меню, справа — путь до .md файла относительно папки docs/.
 nav:
   - Главная: index.md
   - БД:
@@ -23,17 +31,26 @@ nav:
   - Фронт:
       - Оформление заказа: frontend/оформление-заказа.md
 
+# Расширения синтаксиса Markdown, которые понимает сборщик (Python-Markdown).
+# Без строчки в этом списке соответствующий синтаксис в .md-файлах не сработает.
 markdown_extensions:
-  - tables
-  - admonition
-  - pymdownx.highlight
-  - pymdownx.superfences
+  - attr_list           # позволяет вешать HTML-атрибуты на элементы разметки, напр. ![img](x.jpg){ width="400" }
+  - tables               # обычные markdown-таблицы через | и |---|
+  - admonition            # цветные врезки-заметки вида !!! note "Заголовок"
+  - pymdownx.highlight     # подсветка синтаксиса внутри блоков кода
+  - pymdownx.superfences    # расширенные блоки кода (в т.ч. вложенные и с языком puml)
   - pymdownx.tabbed:
-      alternate_style: true
+      alternate_style: true  # вкладки в контенте (```=== "Вкладка 1" ... ```) в стиле Material
 
+# Плагины MkDocs — в отличие от markdown_extensions это питон-пакеты со своей логикой сборки,
+# порядок в списке важен: каждый плагин обрабатывает страницы по очереди сверху вниз.
 plugins:
-  - search
+  - search       # встроенный полнотекстовый поиск по сайту
+  # рендерит диаграммы, подключённые как ![](file.puml) — ДОЛЖЕН идти раньше plantuml,
+  # иначе получаем ошибку file-not-found (см. инструкцию, блок 4)
   - puml-file
   - plantuml:
+      # HTTP-сервис, который рендерит PlantUML-код в SVG; можно заменить на локальный Docker,
+      # если диаграммы не должны уходить за пределы компании
       puml_url: https://www.plantuml.com/plantuml/
-  - render_swagger
+  - render_swagger  # рендерит !!swagger имя_файла.yaml!! в интерактивный Swagger UI
