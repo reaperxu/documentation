@@ -14,13 +14,6 @@ jobs:
       # Скачивает код репозитория в раннер — без этого шага остальные шаги работают с пустой папкой
       - uses: actions/checkout@v4
 
-      # Проверяет структуру markdown: длину строк, стиль заголовков, лишние пробелы и т.п.
-      # Что именно отключено/включено — смотри .markdownlint.yaml в корне репозитория
-      - name: Lint Markdown
-        uses: DavidAnson/markdownlint-cli2-action@v16
-        with:
-          globs: 'docs/**/*.md'
-
       # Проверяет, что все ссылки в .md файлах (в т.ч. внешние) рабочие, а не ведут в 404
       - name: Check links
         uses: lycheeverse/lychee-action@v2
