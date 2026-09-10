@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: API Cinema Aggregator
-  description: Документация для приложения-агрегатора кинотеатров
+  title: Orders API
+  description: Документация API оформления заказов на товары
   version: 1.0.0
 servers:
   - url: https://api.notsystemanalysis.com/v1

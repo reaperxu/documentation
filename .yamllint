@@ -1,6 +1,5 @@
 extends: default
 
 rules:
-  # Отключено по той же причине, что и MD013 в .markdownlint.yaml —
   # длинные построчные комментарии на русском иначе считались бы ошибкой
   line-length: disable
