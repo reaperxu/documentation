@@ -14,47 +14,171 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: [user_id, items]
-              properties:
-                user_id:
-                  type: integer
-                  example: 42
-                items:
-                  type: array
-                  items:
-                    type: object
-                    required: [product_id, quantity]
-                    properties:
-                      product_id:
-                        type: integer
-                        example: 101
-                      quantity:
-                        type: integer
-                        example: 2
+              $ref: '#/components/schemas/CreateOrderRequest'
       responses:
         '201':
           description: Заказ успешно создан
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 987
-                  status:
-                    type: string
-                    example: created
-                  total_amount:
-                    type: number
-                    example: 3450.00
-                  created_at:
-                    type: string
-                    format: date-time
+                $ref: '#/components/schemas/Order'
         '400':
-          description: Невалидное тело запроса
+          description: Невалидное тело запроса (пустой items, отрицательное quantity)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: bad_request
+                message: Невалидное тело запроса
         '404':
-          description: Товар не найден
+          description: Один из product_id не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: product_not_found
+                message: Товар не найден
         '409':
-          description: Недостаточно товара на складе
+          description: Товара недостаточно на складе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: insufficient_stock
+                message: Недостаточно товара на складе
+
+  /orders/{id}:
+    get:
+      summary: Получение информации о заказе
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID заказа
+          schema:
+            type: integer
+            example: 987
+        - name: include_items
+          in: query
+          required: false
+          description: Включать ли состав заказа в ответ. По умолчанию `true`
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Заказ найден, данные возвращены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDetails'
+        '403':
+          description: Заказ принадлежит другому пользователю (если метод вызывается не от имени администратора)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: forbidden
+                message: Заказ принадлежит другому пользователю
+        '404':
+          description: Заказ с таким id не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: order_not_found
+                message: Заказ не найден
+
+components:
+  schemas:
+    CreateOrderRequest:
+      type: object
+      required: [user_id, items]
+      properties:
+        user_id:
+          type: integer
+          example: 42
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemRequest'
+
+    OrderItemRequest:
+      type: object
+      required: [product_id, quantity]
+      properties:
+        product_id:
+          type: integer
+          example: 101
+        quantity:
+          type: integer
+          example: 2
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 987
+        status:
+          type: string
+          example: created
+        total_amount:
+          type: number
+          example: 3450.00
+        created_at:
+          type: string
+          format: date-time
+          example: '2026-08-05T10:15:00Z'
+
+    OrderDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 987
+        user_id:
+          type: integer
+          example: 42
+        status:
+          type: string
+          example: paid
+        total_amount:
+          type: number
+          example: 3450.00
+        created_at:
+          type: string
+          format: date-time
+          example: '2026-08-05T10:15:00Z'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemDetails'
+
+    OrderItemDetails:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          example: 101
+        quantity:
+          type: integer
+          example: 2
+        price:
+          type: number
+          example: 1200.00
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: bad_request
+        message:
+          type: string
+          example: Невалидное тело запроса
