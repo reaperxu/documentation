@@ -93,6 +93,48 @@ paths:
               example:
                 code: order_not_found
                 message: Заказ не найден
+    put:
+      summary: Обновление заказа
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '200':
+          description: Заказ успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Невалидное тело запроса (пустой items, отрицательное quantity)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: bad_request
+                message: Невалидное тело запроса
+        '404':
+          description: Один из product_id не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: product_not_found
+                message: Товар не найден
+        '409':
+          description: Товара недостаточно на складе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: insufficient_stock
+                message: Недостаточно товара на складе
 
 components:
   schemas:
