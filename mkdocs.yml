@@ -26,10 +26,12 @@ nav:
       - Заказы: db/database.md
   - Бэк:
       - Создание заказа: backend/create-order.md
+      - Обновление заказа: backend/update-order.md
       - Получение информации о заказе: backend/get-order.md
       - Swagger: backend/api-reference.md
   - Фронт:
       - Оформление заказа: frontend/оформление-заказа.md
+      - Обновление заказа: frontend/обновление-заказа.md
 
 # Расширения синтаксиса Markdown, которые понимает сборщик (Python-Markdown).
 # Без строчки в этом списке соответствующий синтаксис в .md-файлах не сработает.
