@@ -49,6 +49,15 @@ paths:
               example:
                 code: insufficient_stock
                 message: Недостаточно товара на складе
+        '422':
+          description: Промокод не найден или истёк
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: invalid_promo_code
+                message: Промокод недействителен
 
   /orders/{id}:
     get:
@@ -140,15 +149,28 @@ components:
   schemas:
     CreateOrderRequest:
       type: object
-      required: [user_id, items]
+      required: [user_id, items, delivery_address]
       properties:
         user_id:
           type: integer
           example: 42
         items:
           type: array
+          minItems: 1
+          maxItems: 50
           items:
             $ref: '#/components/schemas/OrderItemRequest'
+        delivery_address:
+          type: string
+          example: г. Москва, ул. Тверская, д. 1, кв. 10
+        promo_code:
+          type: string
+          maxLength: 20
+          example: AUTUMN10
+        comment:
+          type: string
+          maxLength: 500
+          example: Позвонить за час до доставки
 
     OrderItemRequest:
       type: object
@@ -159,6 +181,7 @@ components:
           example: 101
         quantity:
           type: integer
+          minimum: 1
           example: 2
 
     Order:
@@ -172,11 +195,10 @@ components:
           example: created
         total_amount:
           type: number
-          example: 3450.00
-        created_at:
-          type: string
-          format: date-time
-          example: '2026-08-05T10:15:00Z'
+          example: 3105.00
+        discount_amount:
+          type: number
+          example: 345.00
 
     OrderDetails:
       type: object
@@ -192,7 +214,13 @@ components:
           example: paid
         total_amount:
           type: number
-          example: 3450.00
+          example: 3105.00
+        discount_amount:
+          type: number
+          example: 345.00
+        delivery_address:
+          type: string
+          example: г. Москва, ул. Тверская, д. 1, кв. 10
         created_at:
           type: string
           format: date-time

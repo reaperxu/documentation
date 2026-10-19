@@ -36,7 +36,8 @@
     { "product_id": 205, "quantity": 1 }
   ],
   "delivery_address": "г. Москва, ул. Тверская, д. 1, кв. 10",
-  "promo_code": "AUTUMN10"
+  "promo_code": "AUTUMN10",
+  "comment": "Позвонить за час до доставки"
 }
 ```
 
