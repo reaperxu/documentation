@@ -8,10 +8,17 @@
 | id          | PK   | bigint    | not null, auto increment | Идентификатор заказа           |
 | user_id     | FK → users.id | bigint | not null       | Кто оформил заказ                 |
 | status_id   | FK → order_statuses.id | smallint | not null | Текущий статус заказа       |
-| total_amount| —    | numeric(10,2) | not null, >= 0  | Итоговая сумма заказа              |
+| total_amount| —    | numeric(10,2) | not null, >= 0  | Итоговая сумма заказа с учётом скидки |
+| discount_amount | — | numeric(10,2) | not null, default 0, >= 0 | Сумма скидки по промокоду |
+| promo_code  | —    | varchar(20) | null              | Применённый промокод               |
+| delivery_address | — | varchar(255) | not null        | Адрес доставки                     |
+| comment     | —    | varchar(500) | null             | Комментарий покупателя к заказу    |
 | created_at  | —    | timestamp | not null, default now() | Дата создания заказа          |
 
-**Индексы:** `idx_orders_user_id` (по `user_id`, для быстрой выборки заказов пользователя).
+**Индексы:**
+
+- `idx_orders_user_id` (по `user_id`, для быстрой выборки заказов пользователя)
+- `idx_orders_status_id` (по `status_id`, для выборки заказов в нужном статусе)
 
 ### Таблица `order_items`
 
@@ -31,5 +38,6 @@
 | 2  | paid       | Заказ оплачен                 |
 | 3  | shipped    | Заказ передан в доставку      |
 | 4  | cancelled  | Заказ отменён                 |
+| 5  | delivered  | Заказ доставлен покупателю    |
 
 ---

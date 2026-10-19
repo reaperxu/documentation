@@ -24,6 +24,10 @@ entity "orders" as orders {
   * user_id : bigint <<FK>>
   * status_id : smallint <<FK>>
   * total_amount : numeric(10,2)
+  * discount_amount : numeric(10,2)
+  promo_code : varchar(20)
+  * delivery_address : varchar(255)
+  comment : varchar(500)
   * created_at : timestamp
 }
 
